@@ -1,6 +1,6 @@
 # GAS-Reddit-Anonino98
 
-Here is the prompt our friend /u/uAnonino98 needed assistance with
+Here is the prompt our friend /u/Anonino98 needed assistance with
 > 
 > Hello all,
 > 
