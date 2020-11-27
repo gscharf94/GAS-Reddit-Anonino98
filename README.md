@@ -8,11 +8,11 @@
 > 
 > The final goal of this script is to properly format the data into a third file
 > 
-> [!Sheet file 1 (contact)](https://preview.redd.it/4daje3wtyr161.png?width=363&format=png&auto=webp&s=08fd3e78ad1cd61937744ab0c3bc506e5a2bca84)
+> ![Sheet file 1 (contact)](https://preview.redd.it/4daje3wtyr161.png?width=363&format=png&auto=webp&s=08fd3e78ad1cd61937744ab0c3bc506e5a2bca84)
 > 
 > Line = subway line
 > 
-> [!Sheet file 2 (Line update)](https://preview.redd.it/bj929918zr161.png?width=180&format=png&auto=webp&s=56a00ff02cc1010ae398535148e3629996515526)
+> ![Sheet file 2 (Line update)](https://preview.redd.it/bj929918zr161.png?width=180&format=png&auto=webp&s=56a00ff02cc1010ae398535148e3629996515526)
 > 
 > Subway line with template
 > 
