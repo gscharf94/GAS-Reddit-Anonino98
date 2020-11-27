@@ -40,3 +40,102 @@ So before we begin, we create a new standalone Google Scripts app. It needs to b
 We can go here to create a new app and we will reach this page and can click "New Project" to create a standalone app, that is separate from any single google sheets document.
 
 ![Image3](/images/3.png)
+
+So now that we got all that out of the way, let's do some actual coding. The first step we need to do is create references to both google sheets documents in our script so we can do operations onto them. This means we will need the script IDs for both of the previous documents. We can find this by going to the URL while having the sheet open in our web browser
+
+![Image4](/images/4.png)
+
+So let's create references to both files.
+
+```javascript
+function myFunction() {
+  // note, you should always use const for values that aren't going to change
+
+  const contactsFileId = "1fnlcmHpipV1MGbKObcyCJLB_HJmnxmDu8URtXplG0MU";
+  const templatesFileId = "1M7taoQWZfUcN4INzj98dcQDAZYWs8zLGIuUJPKrHRNQ";
+
+  // now with the fileIDs we can access their data using google's SpreadsheetApp object
+  // you can find more info about SpreadsheetApp here v
+  // https://developers.google.com/apps-script/reference/spreadsheet/spreadsheet-app
+
+  let ssContacts = SpreadsheetApp.openById(contactsFileId);
+  let ssTemplates = SpreadsheetApp.openById(templatesFileId);
+}
+```
+
+Now we have references to both files and can perform operations, including taking their data and outputing a spreadsheet. Now, in our specific example we know the size of the two tables we need the data from. For example, in the Contacts spreadsheet, the table is from B3:E10 and in the templates spreadsheet, the table is from B3:C5. We also know they are both on "Sheet1" of our spreadsheet. Using this information, we can create two javascript arrays with that information.
+
+```javascript
+  // we need to get references to the specific sheet the tables are on
+  let sheetContacts = ssContacts.getSheetByName('Sheet1');
+  let sheetTemplates = ssTemplates.getSheetByName('Sheet1');
+
+  // we use .getRange() to select the range the tables are in
+  // and .getValues() to take the information and output them into an array we can work with
+  let contactsArr = sheetContacts.getRange('B3:E10').getValues();
+  let templatesArr = sheetTemplates.getRange('B3:C5').getValues();
+```
+
+Now, we have two javascript arrays, which look like this
+
+contactsArr
+
+![Image5](/images/5.png)
+
+&
+
+templatesArr
+
+![Image6](/images/6.png)
+
+We need to note that both of them are arrays of arrays. So what we need to do now is to create a new javascript array that basically merges these two arrays. NOTE: there are better ways to do this, but based off /u/Anononimo98's claimed level of experience with javascript, I'm trying to stick to arrays
+
+```javascript
+  // we create the new array which will eventually populate a new spreadsheet
+  // the first row we will add a row with headers
+  let newArr = [
+    ['line', 'lastname', 'firstname', 'email', 'template']
+  ];
+
+  // now we will loop through the contactsArr and add a row to newArr for every row in contactsArr
+  // in addition, we will find a match for the line number and add the appropriate template tag
+  // at the end of the array
+  for (const row of contactsArr) {
+    // this is just copying the row so we don't mess with the 
+    // original arr. (good practice in javascript)
+    let rowCopy = [...row];
+
+    // we know now that each row will look like this
+    // [1, 'Sharp', 'James', 'james.sharp@email.com']
+    // so if we want to find the line number, we can access it
+    // by accessing the first element of the arr
+    // namely, row[0]
+    let currentLineNumber = row[0];
+
+    // now we can loop over the templatesArr until we find a match for the line number
+    for (const templateRow of templatesArr) {
+      // templateRow looks like
+      // [1, 'template 1']
+      // so templateRow[0] = line number
+      // and templateRow[1] = the template tag
+      // so we can do an if statement to test if they are equal
+      if (currentLineNumber == templateRow[0]) {
+        // if they are equal, we push the template tag
+        // to the end of the rowCopy array
+        rowCopy.push(templateRow[1]);
+
+        // then we break out of the loop, since we found our match
+        break;
+      }
+    }
+
+    // then we add that rowCopy array to the newArr
+    newArr.push(rowCopy);
+  }
+```
+
+Now we have one array, "newArr" which looks like this
+
+![Image7](/images/7.png)
+
+Now we are almost done. We have the array we need and we just need to a) create a new file and b) write that array to the new file
