@@ -26,6 +26,12 @@ Here is the prompt our friend /u/uAnonino98 needed assistance with
 > 
 > Can u help me please ?
 
+----------------------------
+
+NOTE: You will find two files in this github repo. Code.js will have all the relevant code grouped together WITH comments and then code.js will have the code WITHOUT comments.
+
+----------------------------------
+
 
 So from what I understand, we will have two input spreadsheets. We are combining two different tables into one. This is something we could easily do with SQL but alas, we are not going to be using SQL. So for this mini-tutorial I will create two example spreadsheets.
 
@@ -139,3 +145,42 @@ Now we have one array, "newArr" which looks like this
 ![Image7](/images/7.png)
 
 Now we are almost done. We have the array we need and we just need to a) create a new file and b) write that array to the new file
+
+NOTE: after remembering that you need to use the advance drive service to create new files and not wanting to get into that because this tutorial is already getting longer than expected... we will create a new empty file manually in the same folder called output. Our folder looks like this
+
+![Image8](/images/8.png)
+
+So just like the others, we will need a reference to the file and then a reference to the sheet
+
+```javascript
+  const outputFileId = "11CH1Jd-dnsQPdmY2nZVEa3_iaIa0i-53yfLC3A9hNq4";
+  let ssOutput = SpreadsheetApp.openById(outputFileId);
+  let sheetOutput = ssOutput.getSheetByName('Sheet1');
+
+  // so we just need to select a range in the sheet to place our array data
+  // we need to select a range with the exact same dimensions as our array
+  // we know our array has 5 columns
+  // and we can find out how long our array is by check the
+  // array.length attribute
+
+  let outputRange = sheetOutput.getRange(`A1:E${newArr.length}`);
+
+  // once we have the range object, we just use setValues(data) and we're done!
+  outputRange.setValues(newArr);
+```
+
+So now we just go to our script editor
+
+![Image9](/images/9.png)
+
+and click run -> run function -> myFunction()
+
+It will ask us for some permissions because we using our script to automatically access our files. Just click through on advanced and accept the terms to tell daddy that's OK for your scripts to mess with your files.
+
+![Image10](/images/10.png)
+
+
+
+You may have to run the script again after giving permissions because Google is annoying, but once you run for the second time, open up the output file and you'll that everything moved over as planned
+
+![Image11](/images/11.png)
